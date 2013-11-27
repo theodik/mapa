@@ -19,6 +19,10 @@ class View {
   }
 
   protected function _render($params) {
+    $r = $this->controller->getRouter();
+    $route = function ($path, $params = Array()) use ($r) {
+      return $r->generate($path, $params);
+    };
     extract($this->variables);
     include($this->getFileName());
   }

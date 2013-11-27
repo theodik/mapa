@@ -1,4 +1,7 @@
 %html
   %body
     %h1 Ahoj
-    %span=$test
+    %form(method='post' action=$route('login'))
+      %input(type='text' name='name')
+      %input(type='password' name='password')
+      %input(type='submit')
