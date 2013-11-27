@@ -1,0 +1,13 @@
+{
+  "development": {
+    "uri": "mysql:host=localhost;dbname=database",
+    "username": "username",
+    "password": "password"
+  },
+
+  "production": {
+    "uri": "mysql:host=localhost;dbname=database",
+    "username": "username",
+    "password": "passwd"
+  }
+}
