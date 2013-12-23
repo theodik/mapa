@@ -22,36 +22,37 @@ class Controller {
     $this->params = $params;
   }
 
+  public static function controller_name($className) {
+    return strtolower(str_replace("Controller", '', $className));
+  }
+
+  public function name() {
+    return self::controller_name(get_class($this));
+  }
+
   public function render($action) {
-    $variables = null;
+    $result = null;
     if (method_exists($this, $action)) {
-      $variables = call_user_func(array($this, $action), $this->params);
+      $result = call_user_func(array($this, $action), $this->params);
     }
-    if ($variables === false) {
+    if ($result === false) {
       return;
     }
-    $view = $this->getView($action, $variables);
-    $view->render();
-  }
 
-  public function getParams() {
-    return $this->params;
-  }
+    $builder = new ViewBuilder($this, $action);
+    if (get_key($result, 'layout', true)) {
+      $builder->layout();
+    }
+    $builder->view($action);
+    $view = $builder->build();
 
-  public function getApplication() {
-    return $this->application;
-  }
+    $context = get_object_vars($this);
+    $context['app'] = $this->application;
+    $context['controller'] = $this;
+    $context['router'] = $this->application->getRouter();
+    $context['params'] = $this->params;
 
-  public function getRouter() {
-    return $this->application->getRouter();
-  }
-
-  protected function getView($action, $variables) {
-    $name = get_class($this);
-    $vname = getControllerFileName($name);
-    $viewName = $vname . '/' . $action;
-    $view = new HamlView($viewName, $variables, $this);
-    return $view;
+    $view->_render($context);
   }
 
   /// helpers

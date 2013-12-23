@@ -5,8 +5,10 @@ define('ENV', 'development');
 
 define('ROOT_DIR', __DIR__);
 require 'vendor/autoload.php';
-require 'lib/params.php';
+require 'lib/support.php';
+require 'lib/renderer.php';
 require 'lib/view.php';
+require 'lib/params.php';
 require 'lib/controller.php';
 require 'lib/application.php';
 
@@ -19,7 +21,7 @@ if (ENV != 'production') {
   error_reporting(0);
 }
 
-$application = new Application();
+$application = Application::instance();
 $application->init();
 $application->run();
 $application->finalize();

@@ -2,7 +2,19 @@
 
 class Application {
 
+  protected static $instance = null;
   private $config, $router;
+
+  private function __construct() {
+  }
+
+  public static function instance() {
+    if (!self::$instance) {
+      self::$instance = new Application();
+    }
+
+    return self::$instance;
+  }
 
   public function init() {
     $this->config = $this->loadConfig(ROOT_DIR . '/config/application.json');
@@ -20,7 +32,9 @@ class Application {
 
     if ($match === false) {
       http_response_code(404);
-    }
+      $this->render_404();
+      return;
+   }
 
     $params = new Params($_GET, $_POST, $match['params']);
 
@@ -31,6 +45,7 @@ class Application {
 
   public function finalize() {
     R::close();
+    self::$instance = null;
   }
 
   public function loadConfig($fileName = null) {
@@ -54,4 +69,13 @@ class Application {
     return $action;
   }
 
+  protected function render_404() {
+    $filename = ROOT_DIR . '/app/views/404.html';
+    if (file_exists($filename)){
+      echo file_get_contents($filename);
+    } else {
+      echo "<html><head><meta charset=\"utf-8\"></head><body><h1>404 Not Found</h1><hr>"
+        ."Additional error while rendering 404 file: File `$filename' not found.</body></html>";
+    }
+  }
 }
