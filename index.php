@@ -1,7 +1,7 @@
 <?php
 
-define('ENV', 'development');
-//define('ENV', 'production');
+define('APP_ENV', 'development');
+//define('APP_ENV', 'production');
 
 define('ROOT_DIR', __DIR__);
 require 'vendor/autoload.php';
@@ -15,7 +15,7 @@ require 'lib/application.php';
 //use RedBean_Facade as R;
 class_alias('RedBean_Facade', 'R');
 
-if (ENV != 'production') {
+if (APP_ENV != 'production') {
   error_reporting(E_ALL);
 } else {
   error_reporting(0);

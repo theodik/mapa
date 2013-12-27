@@ -1,0 +1,34 @@
+.row
+  .large-12.columns
+
+    -// Navigace!
+    .row
+      .large-12.columns
+        %nav.top-bar{'data-topbar' => true}
+          %ul.title-area
+            %li.name
+              %h1
+                -echo $this->link("Administrace", 'admin_index')
+            %li.toggle-topbar.menu-icon
+              %a{'href' => '#'}
+                %span Menu
+
+          %section.top-bar-section
+            %ul.right
+              %li
+                -echo $this->link_tag('Servery', '#')
+              %li
+                -echo $this->link_tag('Uživatelé', '#')
+              %li.divider
+              %li
+                -echo $this->link_tag("Odhlásit", '#')
+              %li.divider
+
+    =$this->yield()
+    %footer.row
+      .large-12.columns
+        %p
+          -echo $router->match()['target']
+
+
+

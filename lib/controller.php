@@ -30,14 +30,20 @@ class Controller {
     return self::controller_name(get_class($this));
   }
 
+  public function router() {
+    return $this->application->getRouter();
+  }
+
   public function render($action) {
-    $result = null;
-    if (method_exists($this, $action)) {
-      $result = call_user_func(array($this, $action), $this->params);
-    }
+    if ($this->call_before_action() === false) return;
+
+    $result = $this->call_action($action);
     if ($result === false) {
       return;
     }
+
+    if ($this->call_after_action() === false) return;
+
 
     $builder = new ViewBuilder($this, $action);
     if (get_key($result, 'layout', true)) {
@@ -45,6 +51,7 @@ class Controller {
     }
     $builder->view($action);
     $view = $builder->build();
+    //var_dump($view);
 
     $context = get_object_vars($this);
     $context['app'] = $this->application;
@@ -53,6 +60,21 @@ class Controller {
     $context['params'] = $this->params;
 
     $view->_render($context);
+  }
+
+  protected function call_before_action() {
+    return $this->call_action('before_action');
+  }
+
+  protected function call_after_action() {
+    return $this->call_action('after_action');
+  }
+
+  protected function call_action($action) {
+    if (method_exists($this, $action)) {
+      return call_user_func(array($this, $action), $this->params);
+    }
+    return null;
   }
 
   /// helpers

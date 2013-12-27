@@ -1,36 +1,30 @@
 <?php
 
 class Params implements ArrayAccess {
-  private $get, $post, $additional;
+  private $params;
 
-  public function __construct($get, $post, $additional) {
-    $this->get = $get;
-    $this->post = $post;
-    $this->additional = $additional;
+  public function __construct(array $additional) {
+    $this->params = array_merge($_REQUEST, $additional);
+  }
+
+  public function session() {
+    return new Session();
   }
 
   public function offsetExists($offset) {
-    return isset($this->get[$offset]) || isset($this->post[$offset]) || isset($this->additional[$offset]);
+    return isset($this->params[$offset]);
   }
 
   public function offsetGet($offset) {
-    if (isset($this->get[$offset])){
-      return $this->sanitize($this->get[$offset]);
-    }
-    if (isset($this->post[$offset])){
-      return $this->sanitize($this->post[$offset]);
-    }
-    if (isset($this->additional[$offset])){
-      return $this->sanitize($this->additional[$offset]);
-    }
+    return $this->sanitize($this->params[$offset]);
   }
 
   public function offsetSet($offset, $value) {
-    
+    $this->params[$offset] = $falue;
   }
 
   public function offsetUnset($offset) {
-
+    unset($this->params[$offset]);
   }
 
   private function sanitize($text) {
@@ -38,3 +32,10 @@ class Params implements ArrayAccess {
   }
 }
 
+
+class Session extends Params {
+  public function __construct() {
+    session_start();
+    $this->params = $_SESSION;
+  }
+}

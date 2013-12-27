@@ -1,6 +1,9 @@
 <?php
 
-class HomeController extends Controller {
+class HomeController extends ApplicationController {
+  public function index($params) {
+    $this->test = "TESTIIIK";
+  }
 
   public function login($params) {
     $user = R::findOne('users', 'name = ? AND hash_pass = SHA1(CONCAT(`name`, ?))', array($params['name'], $params['password']));

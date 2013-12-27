@@ -18,32 +18,26 @@ class ViewBuilder {
   }
 
   public function layout($filename = null) {
+    $locator = new ViewLocator(ROOT_DIR . "/app/views/layouts");
     if ($filename === null) {
-      $locator = new ViewLocator(ROOT_DIR . "/app/views/layouts");
-      $filename = $locator->locate($this->controller->name());
-      if ($filename === FALSE) {
-        foreach (class_parents($this->controller) as $name)  {
-          $filename = $locator->locate(Controller::controller_name($name));
-          if ($filename !== FALSE) break;
-        }
+      $layouts = array_reverse(class_parents($this->controller));
+      foreach ($layouts as $name)  {
+        $filename = $locator->locate(Controller::controller_name($name));
+        $this->addView($this->createView($filename));
       }
     }
 
-    $view = $filename
-      ? new FileView($filename)
-      : new NotFoundView($this->controller, $this->action, "Layout for %s not found.");
+    $filename = $locator->locate($this->controller->name());
+    $this->addView($this->createView($filename));
 
-    return $this->addView($view);
+    return $this;
   }
 
 
   public function view($name = null) {
     $locator = new ViewLocator(ROOT_DIR . "/app/views");
     $filename = $locator->locate($this->controller->name(), $name ?: $this->action);
-    $view = $filename
-      ? new FileView($filename)
-      : new NotFoundView($this->controller, $this->action);
-
+    $view = $this->createView($filename, "View `%s' not found.");
     return $this->addView($view);
   }
 
@@ -51,14 +45,26 @@ class ViewBuilder {
     return $this->root;
   }
 
+  private function createView($filename, $error = false) {
+    if ($filename === false && !$error) return false;
+    if ($filename) {
+      $view = new FileView($filename);
+    } elseif($error) {
+      $view = new NotFoundView($this->controller, $this->action, $error);
+    } else {
+      $view = false;
+    }
+    return $view;
+  }
+
   private function addView($view) {
+    if ($view === FALSE) return;
     if ($this->view) {
       $this->view->addChild($view);
     } else {
       $this->root = $view;
     }
     $this->view = $view;
-    return $this;
   }
 }
 
@@ -106,6 +112,36 @@ class View {
       $view->_render($this->context);
     }
   }
+
+  ////// helpers
+  public function include_javascript($filename = null) {
+    // foreach (glob(ROOT_DIR . '/app/assets/javascripts/'))
+  }
+
+  public function include_stylesheet($filename = '*') {
+    $styles = "";
+    $i = 0;
+    $base = ROOT_DIR . "/assets/stylesheets/";
+    foreach (glob("$base$filename.css", GLOB_BRACE) as $file) {
+      $href = str_replace(ROOT_DIR, Application::instance()->config()->basePath, $file);
+      $styles .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"$href\">\n";
+      $i += 1;
+    }
+    $styles .= "<!-- $i styles-->\n";
+
+    echo $styles;
+  }
+
+  public function link($text, $action) {
+    $router = Application::instance()->getRouter();
+    $path = $router->generate($action);
+    return $this->link_tag($text, $path);
+  }
+
+  public function link_tag($text, $href = null) {
+    if ($href === null) $href = $text;
+    return "<a href=\"$href\">$text</a>";
+  }
 }
 
 class FileView extends View {
@@ -119,6 +155,10 @@ class FileView extends View {
     $renderer = Renderer::get($this->filename);
     $renderer->_render($this, $context);
   }
+
+  public function __toString() {
+    return "FileView: {$this->filename}";
+  }
 }
 
 class NotFoundView extends FileView {
@@ -131,11 +171,15 @@ class NotFoundView extends FileView {
     $this->message = $message ?: "Template %s not found!";
   }
 
-  public function _render() {
+  public function _render($context) {
     printf("<div style=\"color:red\">".$this->message."</div>", "{$this->controller->name()}#{$this->action}");
   }
 
   public function addChild($name, $view = null) {
+  }
+
+  public function __toString() {
+    return "NotFoundView: {$this->filename}";
   }
 }
 

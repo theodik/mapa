@@ -19,8 +19,11 @@ class Application {
   public function init() {
     $this->config = $this->loadConfig(ROOT_DIR . '/config/application.json');
     $databaseConfig = $this->loadConfig(ROOT_DIR . '/config/database.json');
-    R::setup($databaseConfig->{ENV}->uri, $databaseConfig->{ENV}->username, $databaseConfig->{ENV}->password);
+    R::setup($databaseConfig->{APP_ENV}->uri, $databaseConfig->{APP_ENV}->username, $databaseConfig->{APP_ENV}->password);
     R::exec('set names utf8');
+    if (APP_ENV == 'production') {
+      R::freeze(true);
+    }
     $this->router = new AltoRouter();
   }
 
@@ -51,6 +54,10 @@ class Application {
   public function loadConfig($fileName = null) {
     $contents = utf8_encode(file_get_contents($fileName));
     return json_decode($contents);
+  }
+
+  public function config() {
+    return $this->config;
   }
 
   public function getRouter() {

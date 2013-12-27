@@ -27,7 +27,7 @@ class Renderer {
     if (method_exists($this, $name)){
       call_user_func_array(array($this, $name), $arguments);
     } else {
-      call_user_func_array(array($this->view, $name), $arguments);
+      return call_user_func_array(array($this->view, $name), $arguments);
     }
   }
 
@@ -37,9 +37,37 @@ class Renderer {
 }
 
 class PHPRenderer extends Renderer {
-  public function _render($view, $context) {
+  public function _render($view) {
     parent::_render($view);
-    extract($context);
+    extract($view->context);
     include $this->filename;
+  }
+}
+
+class HAMLRenderer extends PHPRenderer {
+
+  private $origfilename;
+
+  protected function compile() {
+    $tmpdir = ROOT_DIR . "/tmp/views" . str_replace(ROOT_DIR . '/app/views', '', dirname($this->filename)) . "/";
+    $tempname = $tmpdir . basename($this->filename, '.haml') . '.php';
+    $haml_code = file_get_contents($this->filename);
+    $template = new MtHaml\Environment('php');
+    $php_code = $template->compileString($haml_code, $this->filename);
+    $this->ensureDirectory($tmpdir);
+    file_put_contents($tempname, $php_code);
+    return $tempname;
+  }
+
+  protected function ensureDirectory($dir) {
+    if (!file_exists($dir)) {
+      mkdir($dir, 0777, true);
+    }
+  }
+
+  public function _render($view) {
+    $this->origfilename = $this->filename;
+    $this->filename = $this->compile();
+    parent::_render($view);
   }
 }
