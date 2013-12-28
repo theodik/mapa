@@ -1,0 +1,16 @@
+.row
+  .large-12.columns
+    %h2 Upravit uživatele #{$user->name}
+    .panel
+      .row
+        .small-5.column
+          -$f = new FormBuilder($user, @$errors)
+          -echo $f->form('admin_update_users', 'id')
+          -echo $f->label('password', 'Heslo')
+          -echo $f->password_field('password', true)
+          -echo $f->label('password_confirmation', 'Heslo znovu')
+          -echo $f->password_field('password_confirmation', true)
+          -echo $f->submit('Uložit')
+          -echo $f->form()
+
+

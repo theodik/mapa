@@ -1,0 +1,16 @@
+.row
+  .large-12.columns
+    %h2 Přihlášení
+    .panel
+      .row
+        .small-5.column
+          -$f = new FormBuilder($user, @$errors)
+          -echo $f->form('admin_new_sessions')
+          -echo $f->label('name', 'Jméno')
+          -echo $f->text_field('name')
+          -echo $f->label('password', 'Heslo')
+          -echo $f->password_field('password')
+          -echo $f->submit('Přihlásit')
+          -echo $f->form()
+
+

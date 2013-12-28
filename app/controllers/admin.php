@@ -2,21 +2,12 @@
 
 class AdminController extends ApplicationController {
   public function before_action($params) {
-    $this->user = R::findOne('users', $params->session()['user_id']);
-    if ($this->user === null) {
-      return $this->redirect($this->router()->generate('admin_login'));
+    $id = $params->session()['user_id'];
+    $this->current_user = R::load('user', $id);
+    if ($this->current_user->id == 0) {
+      return $this->redirect('admin_new_sessions');
     }
 
     $this->title = "administrace";
-  }
-
-  public function index($params) {
-    $this->servers = R::find('servers');
-  }
-
-  public function login($params) {
-  }
-
-  public function do_login($params) {
   }
 }

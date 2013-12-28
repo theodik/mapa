@@ -132,9 +132,9 @@ class View {
     echo $styles;
   }
 
-  public function link($text, $action) {
+  public function link_to($text, $action, $params = array()) {
     $router = Application::instance()->getRouter();
-    $path = $router->generate($action);
+    $path = $router->generate($action, $params);
     return $this->link_tag($text, $path);
   }
 

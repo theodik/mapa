@@ -7,6 +7,7 @@ define('ROOT_DIR', __DIR__);
 require 'vendor/autoload.php';
 require 'lib/support.php';
 require 'lib/renderer.php';
+require 'lib/forms.php';
 require 'lib/view.php';
 require 'lib/params.php';
 require 'lib/controller.php';

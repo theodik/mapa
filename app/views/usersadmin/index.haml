@@ -1,0 +1,19 @@
+.row
+  .large-12.columns
+    .row
+      .large-12.columns
+        .panel
+          .row
+            -foreach ($users as $user)
+              %hr
+              .column
+                .row.clear
+                  .column
+                    Jméno: #{$user->name}
+                  .small-4.column{'style' => 'margin-bottom: 20px'}
+                    -echo $this->link_to('Upravit uživatele', 'admin_edit_users', array('id' => $user->id))
+                    %br
+                    -echo $this->link_to('Smazat uživatele', 'admin_delete_users', array('id' => $user->id))
+    %row
+      .large-8.columns
+        -echo $this->link_to('Přidat uživatele', 'admin_new_users')

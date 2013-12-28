@@ -37,13 +37,13 @@ class Application {
       http_response_code(404);
       $this->render_404();
       return;
-   }
+    }
 
-    $params = new Params($_GET, $_POST, $match['params']);
+    $params = new Params(array_merge($match['params'], array('action' => $this->getAction($match['target']))));
 
     $controllerClass = $this->getController($match['target']);
     $controller = new $controllerClass($this, $params);
-    $controller->render($this->getAction($match['target']));
+    $controller->render_view($this->getAction($match['target']));
   }
 
   public function finalize() {

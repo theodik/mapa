@@ -16,6 +16,7 @@ function getControllerFileName($name) {
 class Controller {
 
   protected $params, $application;
+  public $errors;
 
   public function __construct($application, $params) {
     $this->application = $application;
@@ -34,7 +35,7 @@ class Controller {
     return $this->application->getRouter();
   }
 
-  public function render($action) {
+  public function render_view($action) {
     if ($this->call_before_action() === false) return;
 
     $result = $this->call_action($action);
@@ -49,9 +50,8 @@ class Controller {
     if (get_key($result, 'layout', true)) {
       $builder->layout();
     }
-    $builder->view($action);
+    $builder->view(get_key($result, 'view', $action));
     $view = $builder->build();
-    //var_dump($view);
 
     $context = get_object_vars($this);
     $context['app'] = $this->application;
@@ -85,4 +85,7 @@ class Controller {
     return false;
   }
 
+  protected function render($action) {
+    return array('view' => $action);
+  }
 }

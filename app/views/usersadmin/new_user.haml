@@ -1,0 +1,18 @@
+.row
+  .large-12.columns
+    %h2 Nový uživatel
+    .panel
+      .row
+        .small-5.column
+          -$f = new FormBuilder($user, @$errors)
+          -echo $f->form('admin_create_users')
+          -echo $f->label('name', 'Jméno')
+          -echo $f->text_field('name', true)
+          -echo $f->label('password', 'Heslo')
+          -echo $f->password_field('password', true)
+          -echo $f->label('password_confirmation', 'Heslo znovu')
+          -echo $f->password_field('password_confirmation', true)
+          -echo $f->submit('Vytvořit')
+          -echo $f->form()
+
+

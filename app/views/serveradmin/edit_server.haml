@@ -1,0 +1,14 @@
+.row
+  .large-12.columns
+    %h2 Upravit server #{$server->name}
+    .panel
+      .row
+        .small-5.column
+          -$f = new FormBuilder($server, @$errors)
+          -echo $f->form('admin_update_server', 'id')
+          -echo $f->label('url', 'Adresa k hráčům')
+          -echo $f->text_field('url', true)
+          -echo $f->submit('Upravit')
+          -echo $f->form()
+
+

@@ -1,2 +1,9 @@
-%h1 Home Layout!
+.row
+  .large-12.columns
+    %nav.top-bar{'data-topbar' => true}
+      %section.top-bar-section
+        %ul
+          -foreach($servers as $server)
+            %li
+              -echo $this->link_to($server->name, 'show_server', array('id' => $server->id))
 =$this->yield()

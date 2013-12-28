@@ -1,0 +1,16 @@
+.row
+  .large-12.columns
+    %h2 Nový server
+    .panel
+      .row
+        .small-5.column
+          -$f = new FormBuilder($server, @$errors)
+          -echo $f->form('admin_create_server')
+          -echo $f->label('name', 'Název')
+          -echo $f->text_field('name', true)
+          -echo $f->label('url', 'Adresa k hráčům')
+          -echo $f->text_field('url', true)
+          -echo $f->submit('Vytvořit')
+          -echo $f->form()
+
+
