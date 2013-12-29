@@ -22,14 +22,14 @@ class ServeradminController extends AdminController {
   }
 
   public function edit_server($params) {
-    $this->server = R::findOne('server', 'id = ? AND user_id = ?', array($params['id'], $this->user->id));
+    $this->server = R::findOne('server', 'id = ? AND user_id = ?', array($params['id'], $this->current_user->id));
     if($this->server->id == 0) {
       return $this->redirect('admin_index');
     }
   }
 
   public function update_server($params) {
-    $this->server = R::findOne('server', 'id = ? AND user_id = ?', array($params['id'], $this->user->id));
+    $this->server = R::findOne('server', 'id = ? AND user_id = ?', array($params['id'], $this->current_user->id));
     if($this->server == null) {
       return $this->redirect('admin_index');
     }
