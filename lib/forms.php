@@ -72,7 +72,7 @@ class FormBuilder {
    */
   public function input($type, $attribute, $required = false) {
     $bean = $this->bean->getMeta('type');
-    $value = $this->bean->$attribute;
+    $value = htmlspecialchars($this->bean->$attribute,ENT_QUOTES,'UTF-8');
     $e = $this->errors;
 
     $html = "<input " . (isset($e[$attribute]) ? "class=\"error\" " : '') . "type=\"$type\" id=\"{$bean}[$attribute]\" name=\"{$bean}[$attribute]\"".($value ? " value=\"$value\"" : '').($required ? ' required' : '') . ">\n";

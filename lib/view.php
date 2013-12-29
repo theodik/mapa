@@ -143,6 +143,8 @@ class View {
 
   public function link_tag($text, $href = null) {
     if ($href === null) $href = $text;
+    $text = htmlspecialchars($text, ENT_QUOTES,'UTF-8');
+    $href = htmlspecialchars($href, ENT_QUOTES,'UTF-8');
     return "<a href=\"$href\">$text</a>";
   }
 }
