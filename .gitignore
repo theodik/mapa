@@ -1,4 +1,5 @@
-/nbproject/private/
 /vendor/
 /tmp/
 /config/*.json
+/config/*.php
+.htaccess

@@ -1,9 +1,9 @@
 <?php
 
-define('APP_ENV', 'development');
-//define('APP_ENV', 'production');
-
 define('ROOT_DIR', __DIR__);
+
+require_once('config/environment.php');
+
 require 'vendor/autoload.php';
 require 'lib/support.php';
 require 'lib/renderer.php';
