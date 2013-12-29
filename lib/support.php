@@ -1,9 +1,22 @@
 <?php
 
+/**
+ * Vrací hodnotu podle klíče z pole
+ *
+ * @param mixed[] $array pole z kterého se čte
+ * @param mixed $key klíč
+ * @param mixed $default defaultní hodnota pokud klíč v poli neexistuje
+ */
 function get_key($array, $key, $default = null) {
   return isset($array[$key]) ? $array[$key] : $default;
 }
 
+/**
+ * Naplní beanu hodnotami z params
+ *
+ * @param $bean model
+ * @param Params $params params
+ */
 function fill_attributes($bean, $params) {
   $type = $bean->getMeta('type');
   if (isset($params[$type])) {
@@ -13,6 +26,13 @@ function fill_attributes($bean, $params) {
   }
 }
 
+/**
+ * Vytvoří novou beanu a naplní ji hodnotami z params
+ *
+ * @uses fill_attributes() k naplnění hodnotami
+ * @param string $type typ modelu
+ * @param Params $params params
+ */
 function dispense($type, $params) {
   $bean = R::dispense($type);
   fill_attributes($bean, $params);

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Renderuje view podle typu
+ */
 class Renderer {
   public static function get($filename) {
     $file = basename($filename);

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Objekt params reprezentuje data předané přes POST/GET metodu
+ */
 class Params implements ArrayAccess {
   private $params, $session;
 
@@ -8,6 +11,9 @@ class Params implements ArrayAccess {
     $this->session = new Session();
   }
 
+  /**
+   * Vrátí objekt se session
+   */
   public function session() {
     return $this->session;
   }
@@ -37,6 +43,9 @@ class Params implements ArrayAccess {
   }
 }
 
+/**
+ * Objekt Session reprezentuje data v php session
+ */
 class Session implements ArrayAccess {
   private $params;
 
@@ -65,6 +74,9 @@ class Session implements ArrayAccess {
     unset($this->params[$offset]);
   }
 
+  /**
+   * Vymaže všechny data ze session
+   */
   public function clear() {
     session_destroy();
   }

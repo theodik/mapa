@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Vytváří view
+ */
 class ViewBuilder {
   private $controller, $action;
   protected $root, $view;

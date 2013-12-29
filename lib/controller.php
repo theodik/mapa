@@ -7,12 +7,20 @@ spl_autoload_register(function ($name) {
   include(ROOT_DIR . '/app/controllers/' . getControllerFileName($name) . '.php');
 });
 
+/**
+ * Vrátí cestu k souboru s controllerem
+ *
+ * @return string cesta k souboru s controllerem
+ */
 function getControllerFileName($name) {
   $matches = Array();
   preg_match('/^(\w+)Controller$/', $name, $matches);
   return strtolower($matches[1]);
 }
 
+/**
+ * Třída Controller vykonává akce a renderuje views
+ */
 class Controller {
 
   protected $params, $application;
@@ -23,18 +31,40 @@ class Controller {
     $this->params = $params;
   }
 
+  /**
+   * Vrací z názvu třídy controlleru lowercase název.
+   *
+   * @param string $className Název třídy
+   * @return string lowercase název
+   */
   public static function controller_name($className) {
     return strtolower(str_replace("Controller", '', $className));
   }
 
+  /**
+   * Vrací jméno controlleru
+   *
+   * @return string název
+   */
   public function name() {
     return self::controller_name(get_class($this));
   }
 
+  /**
+   * Vrací router
+   *
+   * @return AltoRouter router
+   */
   public function router() {
     return $this->application->getRouter();
   }
 
+
+  /**
+   * Zavolá akci a vyrenderuje požadované view.
+   *
+   * @param string $action akce controlleru
+   */
   public function render_view($action) {
     if ($this->call_before_action() === false) return;
 
@@ -78,6 +108,15 @@ class Controller {
   }
 
   /// helpers
+  /**
+   * Přesměruje na jinou akci
+   *
+   * V akci controlleru:
+   * return $this->redirect('root');
+   *
+   * @param string $path akce
+   * @return boolean Vždy vrací false
+   */
   protected function redirect($path) {
     $router = $this->application->getRouter();
     $url = $router->generate($path);
@@ -85,6 +124,15 @@ class Controller {
     return false;
   }
 
+  /**
+   * Vyrenderuje view jiné akce
+   *
+   * V akci controlleru:
+   * return $this->redirect('index');
+   *
+   * @param string $action akce controlleru
+   * @return mixed[]
+   */
   protected function render($action) {
     return array('view' => $action);
   }
