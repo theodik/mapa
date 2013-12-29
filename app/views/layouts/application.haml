@@ -4,7 +4,7 @@
     %meta{'charset' => 'utf-8'}
     %title="Mapa hráčů".(@$title ? " - $title" : '')
     -$this->include_stylesheet('{normalize,foundation}')
-    -$this->include_stylesheet()
+    -$this->include_stylesheet('styles')
     -$this->include_javascript()
   %body
     -echo $this->yield()
