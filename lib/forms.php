@@ -25,10 +25,11 @@ class FormBuilder {
       $text = ucfirst($attribute);
     }
     $e = $this->errors;
-    return "<label " . (isset($e[$attribute]) ? "class=\"error\" " : '') . "for=\"$attribute\">$text</label>\n";
+    $bean = $this->bean->getMeta('type');
+    return "<label " . (isset($e[$attribute]) ? "class=\"error\" " : '') . "for=\"{$bean}[$attribute]\">$text</label>\n";
   }
 
-  public function input($type, $attribute, $required) {
+  public function input($type, $attribute, $required = false) {
     $bean = $this->bean->getMeta('type');
     $value = $this->bean->$attribute;
     $e = $this->errors;
@@ -40,11 +41,11 @@ class FormBuilder {
     return $html;
   }
 
-  public function text_field($attribute, $required) {
+  public function text_field($attribute, $required = false) {
     return $this->input('text', $attribute, $required);
   }
 
-  public function password_field($attribute, $required) {
+  public function password_field($attribute, $required = false) {
     return $this->input('password', $attribute, $required);
   }
 

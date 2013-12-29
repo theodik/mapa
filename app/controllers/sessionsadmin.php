@@ -7,7 +7,6 @@ class SessionsadminController extends ApplicationController {
 
   public function create_session($params) {
     $info = array($params['user']['name'], sha1($params['user']['name'].':'.$params['user']['password']));
-    var_dump($info);
     $this->user = R::findOne('user', 'name = ? AND hash_pass = ?', $info);
 
     if (!$this->user) {
@@ -16,7 +15,8 @@ class SessionsadminController extends ApplicationController {
       return $this->render('new_session');
     }
 
-    $params->session()['user_id'] = $this->user->id;
+    $session = $params->session();
+    $session['user_id'] = $this->user->id;
     var_dump($params->session());
 
     // return $this->render('new_session');
