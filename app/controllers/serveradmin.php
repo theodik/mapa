@@ -40,7 +40,7 @@ class ServeradminController extends AdminController {
       return $this->redirect('admin_index');
     } else {
       $this->errors = array('url' => 'Špatná adresa');
-      return $this->render('new_server');
+      return $this->render('edit_server');
     }
   }
 
