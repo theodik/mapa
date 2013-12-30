@@ -71,6 +71,9 @@ class ViewBuilder {
   }
 }
 
+/**
+ * Třída která zjišťuje cestu k zadanému view
+ */
 class ViewLocator {
   private $basePath;
   public function __construct($basePath) {
@@ -89,6 +92,11 @@ class ViewLocator {
   }
 }
 
+/**
+ * View
+ *
+ * renderuje pomocí rendereru zadané view
+ */
 class View {
   protected $children = Array();
 
@@ -159,6 +167,9 @@ class View {
   }
 }
 
+/**
+ * View ze souboru
+ */
 class FileView extends View {
   protected $filename;
   public function __construct($filename) {
@@ -176,6 +187,9 @@ class FileView extends View {
   }
 }
 
+/**
+ * View které vyrenderuje chybu pokud soubor nebyl nalezen
+ */
 class NotFoundView extends FileView {
   private $controller, $action;
 
