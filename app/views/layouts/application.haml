@@ -5,6 +5,11 @@
     %title="Mapa hráčů".(@$title ? " - $title" : '')
     -$this->include_stylesheet('{normalize,foundation}')
     -$this->include_stylesheet('styles')
-    -$this->include_javascript()
+    
   %body
     -echo $this->yield()
+    -$this->include_javascript('modernizr')
+    -$this->include_javascript('jquery')
+    -$this->include_javascript('foundation.min')
+    :javascript
+      jQuery(document).foundation();

@@ -117,8 +117,18 @@ class View {
   }
 
   ////// helpers
-  public function include_javascript($filename = null) {
-    // foreach (glob(ROOT_DIR . '/app/assets/javascripts/'))
+  public function include_javascript($filename = '*') {
+    $styles = "";
+    $i = 0;
+    $base = ROOT_DIR . "/assets/javascripts/";
+    foreach (glob("$base$filename.js", GLOB_BRACE) as $file) {
+      $href = str_replace(ROOT_DIR, Application::instance()->config()->basePath, $file);
+      $styles .= "<script src=\"$href\"></script>\n";
+      $i += 1;
+    }
+    $styles .= "<!-- $i scripts -->\n";
+
+    echo $styles;
   }
 
   public function include_stylesheet($filename = '*') {
